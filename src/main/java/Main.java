@@ -2,22 +2,35 @@ import java.util.Scanner;
 
 public class Main {
 
-
     public static void main(String[] args) {
 
-        Scanner scanner = new Scanner(System.in);
+        var scanner = new Scanner(System.in);
+        FileHandler fileHandler;
+
         System.out.println(Constants.INFO_TEXT);
+
         while (true) {
 
             String input = scanner.nextLine();
 
             if (input.equals(Constants.COMMAND_EXIT)) {
                 break;
+            }
+
+            if (input.contains(Constants.TYPE_CSV)) {
+                fileHandler = new FileHandler();
+                fileHandler.readCvsFile(input);
+                fileHandler.processingFile();
+                fileHandler.printResults();
+
+            } else if (input.contains(Constants.TYPE_XML)) {
+                fileHandler = new FileHandler();
+                fileHandler.readXmlFile(input);
+                fileHandler.processingFile();
+                fileHandler.printResults();
+
             } else {
-                var fileHandler = new FileHandler(input);
-                fileHandler.readFile();
-                fileHandler.printDuplicate();
-                fileHandler.printCitiesFloor();
+                System.out.println(Constants.INFO_TEXT);
             }
         }
     }

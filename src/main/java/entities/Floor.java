@@ -1,3 +1,5 @@
+package entities;
+
 public class Floor {
     private int oneStory;
     private int twoStory;

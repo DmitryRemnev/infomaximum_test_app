@@ -1,28 +1,42 @@
+import entities.Address;
+import entities.Floor;
+import org.w3c.dom.*;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.*;
 import java.util.*;
 
 public class FileHandler {
-    String path;
-    Set<String> addressSet;
-    Map<String, Integer> duplicateMap;
+    List<Address> addressList;
+    Set<Address> addressSet;
+    Map<Address, Integer> duplicateMap;
     Map<String, Floor> citiesFloorMap;
 
-    public FileHandler(String path) {
-        this.path = path;
+    public FileHandler() {
+        addressList = new ArrayList<>();
         addressSet = new TreeSet<>();
         duplicateMap = new HashMap<>();
         citiesFloorMap = new HashMap<>();
     }
 
-    public void readFile() {
-        long start = System.currentTimeMillis();
+    public void readCvsFile(String path) {
 
         try (var reader = new BufferedReader(new FileReader(path))) {
+            System.out.println(Constants.PLEASE_WAIT);
             String line;
 
             reader.readLine();
             while ((line = reader.readLine()) != null) {
-                lineProcessing(line);
+
+                String[] values = line.split(Constants.DELIMITER);
+                String city = values[0].replaceAll(Constants.REG_QUOTES, Constants.SIGN_EMPTY);
+                String street = values[1].replaceAll(Constants.REG_QUOTES, Constants.SIGN_EMPTY);
+                String house = values[2];
+                String floor = values[3];
+                var address = new Address(city, street, house, floor);
+
+                addressList.add(address);
             }
 
         } catch (FileNotFoundException e) {
@@ -31,30 +45,80 @@ public class FileHandler {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        System.out.println((System.currentTimeMillis() - start) + " ms");
     }
 
-    private void lineProcessing(String line) {
+    public void readXmlFile(String path) {
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 
-        if (addressSet.contains(line)) {
-            if (duplicateMap.containsKey(line)) {
-                duplicateMap.put(line, duplicateMap.get(line) + 1);
-            } else {
-                duplicateMap.put(line, 2);
+        try {
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            Document document = builder.parse(path);
+            NodeList list = document.getElementsByTagName(Constants.ITEM);
+
+            System.out.println(Constants.PLEASE_WAIT);
+
+            for (int i = 0; i < list.getLength(); i++) {
+
+                Node node = list.item(i);
+                if (node.getNodeType() == Node.ELEMENT_NODE) {
+                    Element element = (Element) node;
+
+                    String city = element.getAttribute(Constants.CITY);
+                    String street = element.getAttribute(Constants.STREET);
+                    String house = element.getAttribute(Constants.HOUSE);
+                    String floor = element.getAttribute(Constants.FLOOR);
+                    var address = new Address(city, street, house, floor);
+
+                    addressList.add(address);
+                }
             }
-        } else {
-            addressSet.add(line);
+
+        } catch (FileNotFoundException e) {
+            System.out.println(Constants.FILE_NOT_FOUND);
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+    }
 
-        String[] values = line.split(Constants.DELIMITER);
-        String city = values[0];
-        int floor = Integer.parseInt(values[3]);
+    public void processingFile() {
+        duplicateProcessing();
+        floorProcessing();
+    }
 
-        if (citiesFloorMap.containsKey(city)) {
-            citiesFloorMap.put(city, updateFloor(citiesFloorMap.get(city), floor));
-        } else {
-            citiesFloorMap.put(city, addFloor(new Floor(), floor));
+    public void printResults() {
+        printDuplicate();
+        printCitiesFloor();
+    }
+
+    private void duplicateProcessing() {
+        for (Address address : addressList) {
+
+            if (addressSet.contains(address)) {
+                if (duplicateMap.containsKey(address)) {
+                    duplicateMap.put(address, duplicateMap.get(address) + 1);
+
+                } else {
+                    duplicateMap.put(address, 2);
+                }
+
+            } else {
+                addressSet.add(address);
+            }
+        }
+    }
+
+    private void floorProcessing() {
+        for (Address address : addressList) {
+
+            String city = address.getCity();
+            int floor = Integer.parseInt(address.getFloor());
+
+            if (citiesFloorMap.containsKey(city)) {
+                citiesFloorMap.put(city, updateFloor(citiesFloorMap.get(city), floor));
+            } else {
+                citiesFloorMap.put(city, addFloor(new Floor(), floor));
+            }
         }
     }
 
@@ -104,16 +168,20 @@ public class FileHandler {
         return floor;
     }
 
-    public void printDuplicate() {
-        for (Map.Entry<String, Integer> item : duplicateMap.entrySet()) {
-            System.out.println(Constants.RECORD + item.getKey() + Constants.REPEATS + item.getValue() + Constants.TIMES);
+    private void printDuplicate() {
+        for (Map.Entry<Address, Integer> item : duplicateMap.entrySet()) {
+            System.out.println(Constants.RECORD + item.getKey().getCity() + " " +
+                    item.getKey().getStreet() + " " +
+                    item.getKey().getHouse() + " " +
+                    item.getKey().getFloor() + " " +
+                    Constants.REPEATS + item.getValue() + Constants.TIMES);
             System.out.println();
         }
     }
 
-    public void printCitiesFloor() {
+    private void printCitiesFloor() {
         for (Map.Entry<String, Floor> item : citiesFloorMap.entrySet()) {
-            System.out.println(Constants.CITY + item.getKey());
+            System.out.println(Constants.CITY_RU + item.getKey());
             System.out.println(Constants.ONE_FLOOR + item.getValue().getOneStory());
             System.out.println(Constants.TWO_FLOOR + item.getValue().getTwoStory());
             System.out.println(Constants.THREE_FLOOR + item.getValue().getThreeStory());
