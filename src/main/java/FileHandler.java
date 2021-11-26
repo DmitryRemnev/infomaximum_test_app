@@ -8,14 +8,12 @@ import java.io.*;
 import java.util.*;
 
 public class FileHandler {
-    List<Address> addressList;
-    Set<Address> addressSet;
+    private final List<Address> addressList;
     Map<Address, Integer> duplicateMap;
     Map<String, Floor> citiesFloorMap;
 
     public FileHandler() {
         addressList = new ArrayList<>();
-        addressSet = new TreeSet<>();
         duplicateMap = new HashMap<>();
         citiesFloorMap = new HashMap<>();
     }
@@ -53,9 +51,10 @@ public class FileHandler {
         try {
             DocumentBuilder builder = factory.newDocumentBuilder();
             Document document = builder.parse(path);
-            NodeList list = document.getElementsByTagName(Constants.ITEM);
 
             System.out.println(Constants.PLEASE_WAIT);
+
+            NodeList list = document.getElementsByTagName(Constants.ITEM);
 
             for (int i = 0; i < list.getLength(); i++) {
 
@@ -81,17 +80,13 @@ public class FileHandler {
         }
     }
 
-    public void processingFile() {
-        duplicateProcessing();
-        floorProcessing();
+    public List<Address> getAddressList() {
+        return addressList;
     }
 
-    public void printResults() {
-        printDuplicate();
-        printCitiesFloor();
-    }
+    Map<Address, Integer> duplicateProcessing(List<Address> addressList) {
+        Set<Address> addressSet = new TreeSet<>();
 
-    private void duplicateProcessing() {
         for (Address address : addressList) {
 
             if (addressSet.contains(address)) {
@@ -106,9 +101,11 @@ public class FileHandler {
                 addressSet.add(address);
             }
         }
+
+        return duplicateMap;
     }
 
-    private void floorProcessing() {
+    Map<String, Floor> floorProcessing(List<Address> addressList) {
         for (Address address : addressList) {
 
             String city = address.getCity();
@@ -120,6 +117,8 @@ public class FileHandler {
                 citiesFloorMap.put(city, addFloor(new Floor(), floor));
             }
         }
+
+        return citiesFloorMap;
     }
 
     private Floor addFloor(Floor floor, int value) {
@@ -168,7 +167,7 @@ public class FileHandler {
         return floor;
     }
 
-    private void printDuplicate() {
+    void printDuplicate(Map<Address, Integer> duplicateMap) {
         for (Map.Entry<Address, Integer> item : duplicateMap.entrySet()) {
             System.out.println(Constants.RECORD + item.getKey().getCity() + " " +
                     item.getKey().getStreet() + " " +
@@ -179,7 +178,7 @@ public class FileHandler {
         }
     }
 
-    private void printCitiesFloor() {
+    void printCitiesFloor(Map<String, Floor> citiesFloorMap) {
         for (Map.Entry<String, Floor> item : citiesFloorMap.entrySet()) {
             System.out.println(Constants.CITY_RU + item.getKey());
             System.out.println(Constants.ONE_FLOOR + item.getValue().getOneStory());
@@ -189,5 +188,10 @@ public class FileHandler {
             System.out.println(Constants.FIVE_FLOOR + item.getValue().getFiveStory());
             System.out.println();
         }
+    }
+
+    void printResults() {
+        printDuplicate(duplicateProcessing(getAddressList()));
+        printCitiesFloor(floorProcessing(getAddressList()));
     }
 }

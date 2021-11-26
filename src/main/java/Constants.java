@@ -1,4 +1,8 @@
-public class Constants {
+public final class Constants {
+
+    private Constants() {
+    }
+
     public static final String COMMAND_EXIT = "exit";
     public static final String INFO_TEXT = "Введите путь к файлу для его обработки, либо exit для выхода из программы";
     public static final String DELIMITER = ";";

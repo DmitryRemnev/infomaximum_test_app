@@ -5,7 +5,7 @@ public class Main {
     public static void main(String[] args) {
 
         var scanner = new Scanner(System.in);
-        FileHandler fileHandler;
+        FileHandler handler;
 
         System.out.println(Constants.INFO_TEXT);
 
@@ -18,16 +18,14 @@ public class Main {
             }
 
             if (input.contains(Constants.TYPE_CSV)) {
-                fileHandler = new FileHandler();
-                fileHandler.readCvsFile(input);
-                fileHandler.processingFile();
-                fileHandler.printResults();
+                handler = new FileHandler();
+                handler.readCvsFile(input);
+                handler.printResults();
 
             } else if (input.contains(Constants.TYPE_XML)) {
-                fileHandler = new FileHandler();
-                fileHandler.readXmlFile(input);
-                fileHandler.processingFile();
-                fileHandler.printResults();
+                handler = new FileHandler();
+                handler.readXmlFile(input);
+                handler.printResults();
 
             } else {
                 System.out.println(Constants.INFO_TEXT);
