@@ -18,13 +18,13 @@ public class Main {
             }
 
             if (input.contains(Constants.TYPE_CSV)) {
-                handler = new FileHandler();
-                handler.readCvsFile(input);
+                handler = new CSVFileHandler();
+                handler.readFile(input);
                 handler.printResults();
 
             } else if (input.contains(Constants.TYPE_XML)) {
-                handler = new FileHandler();
-                handler.readXmlFile(input);
+                handler = new XMLFileHandler();
+                handler.readFile(input);
                 handler.printResults();
 
             } else {

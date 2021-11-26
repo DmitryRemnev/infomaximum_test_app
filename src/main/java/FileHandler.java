@@ -1,90 +1,20 @@
 import entities.Address;
 import entities.Floor;
-import org.w3c.dom.*;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.*;
 import java.util.*;
 
-public class FileHandler {
-    private final List<Address> addressList;
-    Map<Address, Integer> duplicateMap;
-    Map<String, Floor> citiesFloorMap;
+public abstract class FileHandler {
+    protected final List<Address> addressList = new ArrayList<>();
+    protected final Map<Address, Integer> duplicateMap = new HashMap<>();
+    protected final Map<String, Floor> citiesFloorMap = new HashMap<>();
 
-    public FileHandler() {
-        addressList = new ArrayList<>();
-        duplicateMap = new HashMap<>();
-        citiesFloorMap = new HashMap<>();
-    }
+    abstract void readFile(String path);
 
-    public void readCvsFile(String path) {
-
-        try (var reader = new BufferedReader(new FileReader(path))) {
-            System.out.println(Constants.PLEASE_WAIT);
-            String line;
-
-            reader.readLine();
-            while ((line = reader.readLine()) != null) {
-
-                String[] values = line.split(Constants.DELIMITER);
-                String city = values[0].replaceAll(Constants.REG_QUOTES, Constants.SIGN_EMPTY);
-                String street = values[1].replaceAll(Constants.REG_QUOTES, Constants.SIGN_EMPTY);
-                String house = values[2];
-                String floor = values[3];
-                var address = new Address(city, street, house, floor);
-
-                addressList.add(address);
-            }
-
-        } catch (FileNotFoundException e) {
-            System.out.println(Constants.FILE_NOT_FOUND);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void readXmlFile(String path) {
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-
-        try {
-            DocumentBuilder builder = factory.newDocumentBuilder();
-            Document document = builder.parse(path);
-
-            System.out.println(Constants.PLEASE_WAIT);
-
-            NodeList list = document.getElementsByTagName(Constants.ITEM);
-
-            for (int i = 0; i < list.getLength(); i++) {
-
-                Node node = list.item(i);
-                if (node.getNodeType() == Node.ELEMENT_NODE) {
-                    Element element = (Element) node;
-
-                    String city = element.getAttribute(Constants.CITY);
-                    String street = element.getAttribute(Constants.STREET);
-                    String house = element.getAttribute(Constants.HOUSE);
-                    String floor = element.getAttribute(Constants.FLOOR);
-                    var address = new Address(city, street, house, floor);
-
-                    addressList.add(address);
-                }
-            }
-
-        } catch (FileNotFoundException e) {
-            System.out.println(Constants.FILE_NOT_FOUND);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public List<Address> getAddressList() {
+    private List<Address> getAddressList() {
         return addressList;
     }
 
-    Map<Address, Integer> duplicateProcessing(List<Address> addressList) {
+    private Map<Address, Integer> duplicateProcessing(List<Address> addressList) {
         Set<Address> addressSet = new TreeSet<>();
 
         for (Address address : addressList) {
@@ -105,7 +35,7 @@ public class FileHandler {
         return duplicateMap;
     }
 
-    Map<String, Floor> floorProcessing(List<Address> addressList) {
+    private Map<String, Floor> floorProcessing(List<Address> addressList) {
         for (Address address : addressList) {
 
             String city = address.getCity();
