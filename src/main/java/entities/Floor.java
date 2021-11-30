@@ -1,5 +1,7 @@
 package entities;
 
+import java.util.Objects;
+
 public class Floor {
     private int oneStory;
     private int twoStory;
@@ -48,5 +50,18 @@ public class Floor {
 
     public void setFiveStory(int fiveStory) {
         this.fiveStory = fiveStory;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Floor floor = (Floor) o;
+        return oneStory == floor.oneStory && twoStory == floor.twoStory && threeStory == floor.threeStory && fourStory == floor.fourStory && fiveStory == floor.fiveStory;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(oneStory, twoStory, threeStory, fourStory, fiveStory);
     }
 }

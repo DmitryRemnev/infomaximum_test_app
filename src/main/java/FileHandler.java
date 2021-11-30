@@ -14,7 +14,7 @@ public abstract class FileHandler {
         return addressList;
     }
 
-    private Map<Address, Integer> duplicateProcessing(List<Address> addressList) {
+    protected Map<Address, Integer> duplicateProcessing(List<Address> addressList) {
         Set<Address> addressSet = new TreeSet<>();
 
         for (Address address : addressList) {
@@ -35,7 +35,7 @@ public abstract class FileHandler {
         return duplicateMap;
     }
 
-    private Map<String, Floor> floorProcessing(List<Address> addressList) {
+    protected Map<String, Floor> floorProcessing(List<Address> addressList) {
         for (Address address : addressList) {
 
             String city = address.getCity();
@@ -51,7 +51,7 @@ public abstract class FileHandler {
         return citiesFloorMap;
     }
 
-    private Floor addFloor(Floor floor, int value) {
+    protected Floor addFloor(Floor floor, int value) {
 
         switch (value) {
             case 1:
@@ -74,7 +74,7 @@ public abstract class FileHandler {
         return floor;
     }
 
-    private Floor updateFloor(Floor floor, int value) {
+    protected Floor updateFloor(Floor floor, int value) {
 
         switch (value) {
             case 1:
