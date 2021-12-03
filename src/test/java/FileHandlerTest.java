@@ -36,11 +36,11 @@ public class FileHandlerTest {
             }
         };
 
-        Address address1 = new Address("Барнаул", "Дальняя улица", "56", "2");
-        Address address2 = new Address("Братск", "Большая Октябрьская улица", "65", "5");
-        Address address3 = new Address("Барнаул", "Дальняя улица", "56", "2");
-        Address address4 = new Address("Братск", "Большая Октябрьская улица", "65", "5");
-        Address address5 = new Address("Барнаул", "Дальняя улица", "56", "2");
+        Address address1 = new Address("Барнаул", "Дальняя улица", 56, 2);
+        Address address2 = new Address("Братск", "Большая Октябрьская улица", 65, 5);
+        Address address3 = new Address("Барнаул", "Дальняя улица", 56, 2);
+        Address address4 = new Address("Братск", "Большая Октябрьская улица", 65, 5);
+        Address address5 = new Address("Барнаул", "Дальняя улица", 56, 2);
 
         notDuplicateList = new ArrayList<>();
         notDuplicateList.add(address1);

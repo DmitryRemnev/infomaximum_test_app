@@ -15,6 +15,9 @@ public abstract class FileHandler {
     }
 
     protected Map<Address, Integer> duplicateProcessing(List<Address> addressList) {
+        if (addressList == null || addressList.isEmpty())
+            throw new IllegalArgumentException("collection is null or empty");
+
         Set<Address> addressSet = new TreeSet<>();
 
         for (Address address : addressList) {
@@ -36,10 +39,13 @@ public abstract class FileHandler {
     }
 
     protected Map<String, Floor> floorProcessing(List<Address> addressList) {
+        if (addressList == null || addressList.isEmpty())
+            throw new IllegalArgumentException("collection is null or empty");
+
         for (Address address : addressList) {
 
             String city = address.getCity();
-            int floor = Integer.parseInt(address.getFloor());
+            int floor = address.getFloor();
 
             if (citiesFloorMap.containsKey(city)) {
                 citiesFloorMap.put(city, updateFloor(citiesFloorMap.get(city), floor));
@@ -69,6 +75,8 @@ public abstract class FileHandler {
             case 5:
                 floor.setFiveStory(1);
                 break;
+            default:
+                break;
         }
 
         return floor;
@@ -92,12 +100,17 @@ public abstract class FileHandler {
             case 5:
                 floor.setFiveStory(floor.getFiveStory() + 1);
                 break;
+            default:
+                break;
         }
 
         return floor;
     }
 
     void printDuplicate(Map<Address, Integer> duplicateMap) {
+        if (duplicateMap == null || duplicateMap.isEmpty())
+            throw new IllegalArgumentException("collection is null or empty");
+
         for (Map.Entry<Address, Integer> item : duplicateMap.entrySet()) {
             System.out.println(Constants.RECORD + item.getKey().getCity() + " " +
                     item.getKey().getStreet() + " " +
@@ -109,6 +122,9 @@ public abstract class FileHandler {
     }
 
     void printCitiesFloor(Map<String, Floor> citiesFloorMap) {
+        if (citiesFloorMap == null || citiesFloorMap.isEmpty())
+            throw new IllegalArgumentException("collection is null or empty");
+
         for (Map.Entry<String, Floor> item : citiesFloorMap.entrySet()) {
             System.out.println(Constants.CITY_RU + item.getKey());
             System.out.println(Constants.ONE_FLOOR + item.getValue().getOneStory());

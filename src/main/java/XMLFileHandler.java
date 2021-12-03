@@ -30,8 +30,8 @@ public class XMLFileHandler extends FileHandler {
 
                     String city = element.getAttribute(Constants.CITY);
                     String street = element.getAttribute(Constants.STREET);
-                    String house = element.getAttribute(Constants.HOUSE);
-                    String floor = element.getAttribute(Constants.FLOOR);
+                    int house = Integer.parseInt(element.getAttribute(Constants.HOUSE));
+                    int floor = Integer.parseInt(element.getAttribute(Constants.FLOOR));
                     var address = new Address(city, street, house, floor);
 
                     addressList.add(address);

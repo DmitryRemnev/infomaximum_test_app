@@ -5,10 +5,10 @@ import java.util.Objects;
 public class Address implements Comparable<Address> {
     private final String city;
     private final String street;
-    private final String house;
-    private final String floor;
+    private final int house;
+    private final int floor;
 
-    public Address(String city, String street, String house, String floor) {
+    public Address(String city, String street, int house, int floor) {
         this.city = city;
         this.street = street;
         this.house = house;
@@ -23,11 +23,11 @@ public class Address implements Comparable<Address> {
         return street;
     }
 
-    public String getHouse() {
+    public int getHouse() {
         return house;
     }
 
-    public String getFloor() {
+    public int getFloor() {
         return floor;
     }
 
@@ -55,10 +55,10 @@ public class Address implements Comparable<Address> {
             result = this.street.compareTo(o.street);
         }
         if (result == 0) {
-            result = this.house.compareTo(o.house);
+            result = Integer.compare(this.house, o.house);
         }
         if (result == 0) {
-            result = this.floor.compareTo(o.floor);
+            result = Integer.compare(this.floor, o.floor);
         }
 
         return result;
