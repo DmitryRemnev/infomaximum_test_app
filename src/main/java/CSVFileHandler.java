@@ -30,19 +30,19 @@ public class CSVFileHandler extends FileHandler {
 
     private Address createAddress(String line) {
         String[] values = line.split(Constants.DELIMITER);
-        if (values.length != 4) throw new IllegalArgumentException("number of elements is not equal to 4");
+        if (values.length != 4) throw new IllegalArgumentException(Constants.NOT_EQUAL_FOUR);
 
         String city = values[0].replaceAll(Constants.REG_QUOTES, Constants.SIGN_EMPTY);
-        if (city.isBlank()) throw new IllegalArgumentException("string is blank");
+        if (city.isBlank()) throw new IllegalArgumentException(Constants.STRING_IS_BLANK);
 
         String street = values[1].replaceAll(Constants.REG_QUOTES, Constants.SIGN_EMPTY);
-        if (street.isBlank()) throw new IllegalArgumentException("string is blank");
+        if (street.isBlank()) throw new IllegalArgumentException(Constants.STRING_IS_BLANK);
 
         int house = Integer.parseInt(values[2]);
-        if (house < 1) throw new IllegalArgumentException("value is less than 1");
+        if (house < 1) throw new IllegalArgumentException(Constants.LESS_THAN_ONE);
 
         int floor = Integer.parseInt(values[3]);
-        if (floor < 1) throw new IllegalArgumentException("value is less than 1");
+        if (floor < 1) throw new IllegalArgumentException(Constants.LESS_THAN_ONE);
 
         return new Address(city, street, house, floor);
     }

@@ -19,11 +19,10 @@ public final class Constants {
     public static final String REG_QUOTES = "\"";
     public static final String SIGN_EMPTY = "";
     public static final String ITEM = "item";
-    public static final String CITY = "city";
-    public static final String STREET = "street";
-    public static final String HOUSE = "house";
-    public static final String FLOOR = "floor";
     public static final String TYPE_CSV = "csv";
     public static final String TYPE_XML = "xml";
     public static final String PLEASE_WAIT = "Выполняются вычисления, пожалуйста подождите!";
+    public static final String NOT_EQUAL_FOUR = "number of values is not equal to 4";
+    public static final String STRING_IS_BLANK = "string is blank";
+    public static final String LESS_THAN_ONE = "value is less than 1";
 }
