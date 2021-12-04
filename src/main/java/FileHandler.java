@@ -16,19 +16,14 @@ public abstract class FileHandler {
 
     protected Map<Address, Integer> duplicateProcessing(List<Address> addressList) {
         if (addressList == null || addressList.isEmpty())
-            throw new IllegalArgumentException("collection is null or empty");
+            throw new IllegalArgumentException(Constants.NULL_OR_EMPTY);
 
-        Set<Address> addressSet = new TreeSet<>();
+        Set<Address> addressSet = new HashSet<>();
 
         for (Address address : addressList) {
 
             if (addressSet.contains(address)) {
-                if (duplicateMap.containsKey(address)) {
-                    duplicateMap.put(address, duplicateMap.get(address) + 1);
-
-                } else {
-                    duplicateMap.put(address, 2);
-                }
+                duplicateMap.put(address, duplicateMap.getOrDefault(address, 1) + 1);
 
             } else {
                 addressSet.add(address);
@@ -40,7 +35,7 @@ public abstract class FileHandler {
 
     protected Map<String, Floor> floorProcessing(List<Address> addressList) {
         if (addressList == null || addressList.isEmpty())
-            throw new IllegalArgumentException("collection is null or empty");
+            throw new IllegalArgumentException(Constants.NULL_OR_EMPTY);
 
         for (Address address : addressList) {
 
@@ -109,9 +104,9 @@ public abstract class FileHandler {
 
     void printDuplicate(Map<Address, Integer> duplicateMap) {
         if (duplicateMap == null || duplicateMap.isEmpty())
-            throw new IllegalArgumentException("collection is null or empty");
+            throw new IllegalArgumentException(Constants.NULL_OR_EMPTY);
 
-        for (Map.Entry<Address, Integer> item : duplicateMap.entrySet()) {
+        for (var item : duplicateMap.entrySet()) {
             System.out.println(Constants.RECORD + item.getKey().getCity() + " " +
                     item.getKey().getStreet() + " " +
                     item.getKey().getHouse() + " " +
@@ -123,9 +118,9 @@ public abstract class FileHandler {
 
     void printCitiesFloor(Map<String, Floor> citiesFloorMap) {
         if (citiesFloorMap == null || citiesFloorMap.isEmpty())
-            throw new IllegalArgumentException("collection is null or empty");
+            throw new IllegalArgumentException(Constants.NULL_OR_EMPTY);
 
-        for (Map.Entry<String, Floor> item : citiesFloorMap.entrySet()) {
+        for (var item : citiesFloorMap.entrySet()) {
             System.out.println(Constants.CITY_RU + item.getKey());
             System.out.println(Constants.ONE_FLOOR + item.getValue().getOneStory());
             System.out.println(Constants.TWO_FLOOR + item.getValue().getTwoStory());

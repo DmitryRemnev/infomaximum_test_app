@@ -2,7 +2,7 @@ package entities;
 
 import java.util.Objects;
 
-public class Address implements Comparable<Address> {
+public class Address {
     private final String city;
     private final String street;
     private final int house;
@@ -45,22 +45,5 @@ public class Address implements Comparable<Address> {
     @Override
     public int hashCode() {
         return Objects.hash(city, street, house, floor);
-    }
-
-    @Override
-    public int compareTo(Address o) {
-        int result = this.city.compareTo(o.city);
-
-        if (result == 0) {
-            result = this.street.compareTo(o.street);
-        }
-        if (result == 0) {
-            result = Integer.compare(this.house, o.house);
-        }
-        if (result == 0) {
-            result = Integer.compare(this.floor, o.floor);
-        }
-
-        return result;
     }
 }

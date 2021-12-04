@@ -25,4 +25,5 @@ public final class Constants {
     public static final String NOT_EQUAL_FOUR = "number of values is not equal to 4";
     public static final String STRING_IS_BLANK = "string is blank";
     public static final String LESS_THAN_ONE = "value is less than 1";
+    public static final String NULL_OR_EMPTY = "collection is null or empty";
 }
